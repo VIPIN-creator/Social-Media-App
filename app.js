@@ -2,16 +2,18 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
+const routes = require('./router');
 
 //  initiate dotenv and make your environment variables available throughout your application
-const dotnev = require('dotenv');
-dotnev.config();
+const dotenv = require('dotenv');
+dotenv.config();
+
 const PORT = process.env.PORT || 4000;
 
+// connect to db
 const db = require('./db');
 
-// connect to db
-db.connect(`${DATABASEURL}`, function(err){
+db.connect(`${process.env.DATABASEURL}`, function(err){
     if(err){
         console.log('Unable to connect');
         process.exit(1);
@@ -25,5 +27,8 @@ db.connect(`${DATABASEURL}`, function(err){
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res)  => {res.render('home-guest')});
+// to parse JSON bodies
+app.use(express.json());
+
+app.use(routes);
 
