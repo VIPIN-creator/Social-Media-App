@@ -5,22 +5,30 @@ const User = require('../models/User');
 exports.RegisterUser = async (req, res) => {
     const user = new User(req.body);
 
-    user.findByEmail((err, users) => {
-        if(err) console.log(err);
-        else{
-            if(users) console.log("we found someone same", users);
-            else console.log(" we found none ", users);
-        }
-    });    
-    
     user.save()
         .then(d => {
             console.log(d);
-            res.send('successful')
+            res.status(201).send('successful')
         })
         .catch(e => {
             console.log("oops found an error", e);
-            res.send('there is error')
+            res.status(406).send('Error');
+        })
+
+}
+
+
+exports.LoginUser = async(req, res) => {
+    const user = req.body;
+
+    User.find(user)
+        .then(d => {
+            console.log(d);
+            res.status(201).send('successful');
+        })
+        .catch(e => {
+            console.log("Login Error", e);
+            res.status(406).send('Login Error');
         })
 
 }
