@@ -37,40 +37,35 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.pre('save', function(next){
 
-    const hash = bcrypt.hashSync(this.password, 12); 
-    this.password = hash;
-    next();
+    bcrypt.hash(this.password, 12, (err, hash) =>{
+        if(err) console.log("error in hashing password", err);
+
+        this.password = hash;
+
+        next();
+    }); 
+    
 
 });
 
 UserSchema.methods.findUser = function(cb){
 
-    const hashPassword = this.password;
+    const insertedPassword = this.password;
   
     mongoose.model('User').findOne({email : this.email, username : this.username}, function(err, doc){
 
-        if(err){
-            console.log("not found ", err);
-        }
+       bcrypt.compare(insertedPassword, doc.password, function(err, result){
 
-        console.log("inserted password", hashPassword);
-
-        bcrypt.compare(doc.password, hashPassword, (err, result) => {
-
-                if(err) console.log("we found an error in checking password", err);
-               
                 cb(err, result);
            
         });
-      
-
+    
     })
 
   }
 
 
 const User = mongoose.model('User', UserSchema); 
-
 
 
 module.exports = User;
