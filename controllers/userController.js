@@ -19,17 +19,23 @@ exports.RegisterUser = async (req, res) => {
 
 
 exports.LoginUser = async(req, res) => {
-    const user = req.body;
+    const user = new User(req.body);
 
-    User.find(user)
-        .then(d => {
-            console.log(d);
-            res.status(201).send('successful');
-        })
-        .catch(e => {
-            console.log("Login Error", e);
-            res.status(406).send('Login Error');
-        })
+    user.findUser((err, result) => {
+        console.log("result is ", result);
+        if(err) {
+            console.log(err);
+            res.status(406).send('Error');
+        }
+        else{
+           if(result){
+               res.status(201).send('Successful');
+           }
+           else res.status(406).send('Error');
+        }
+
+    })
+        
 
 }
 

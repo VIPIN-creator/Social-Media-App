@@ -43,6 +43,31 @@ UserSchema.pre('save', function(next){
 
 });
 
+UserSchema.methods.findUser = function(cb){
+
+    const hashPassword = this.password;
+  
+    mongoose.model('User').findOne({email : this.email, username : this.username}, function(err, doc){
+
+        if(err){
+            console.log("not found ", err);
+        }
+
+        console.log("inserted password", hashPassword);
+
+        bcrypt.compare(doc.password, hashPassword, (err, result) => {
+
+                if(err) console.log("we found an error in checking password", err);
+               
+                cb(err, result);
+           
+        });
+      
+
+    })
+
+  }
+
 
 const User = mongoose.model('User', UserSchema); 
 
