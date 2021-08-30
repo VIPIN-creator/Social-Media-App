@@ -52,13 +52,19 @@ UserSchema.methods.findUser = function(cb){
 
     const insertedPassword = this.password;
   
-    mongoose.model('User').findOne({email : this.email, username : this.username}, function(err, doc){
+    mongoose.model('User').findOne({username : this.username}, function(err, doc){
 
-       bcrypt.compare(insertedPassword, doc.password, function(err, result){
+        if(doc){
+            bcrypt.compare(insertedPassword, doc.password, function(err, result){
 
-                cb(err, result);
-           
-        });
+                return  cb(err, result);
+             
+             });
+            
+        } 
+        else {
+            return cb(err, null) ;
+        }
     
     })
 
