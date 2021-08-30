@@ -14,37 +14,42 @@ exports.RegisterUser = async (req, res) => {
 
     try {
         const user = new User(req.body);
+
+        const oldUser = 
+
         await user.save();
 
         const token = createToken(user._id);
         res.cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 });
 
         res.status(201).send('successful');
-    } catch (error) {
-        res.status(406).send('Error');
+    } 
+    catch (error) {
+        res.status(406).send(error);
     }
-    
-  
-         
         
 }
 
 
 exports.LoginUser = async(req, res) => {
-    const user = new User(req.body);
 
-    user.findUser((err, result) => {
-       if(err) {
-          res.status(406).send('Wrong Password');
-        }
-        else{
-           if(result){
-               res.status(201).send('Successfully logged in');
-           }
-           else res.status(406).send('User not found');
-        }
+    try {
 
-    })
+        const user = new User(req.body);
+        await user.findUser(req.body.username, req.body.password);
+
+        const token = createToken(user._id);
+        res.cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 });
+
+
+        res.status(201).send(user);
+        
+    } catch (error) {
+        res.status(406).send(error);
+    }
+    
+
+   
         
 
 }

@@ -48,26 +48,25 @@ UserSchema.pre('save', function(next){
 
 });
 
-UserSchema.methods.findUser = function(cb){
+UserSchema.methods.findUser = async function(username, password){
 
-    const insertedPassword = this.password;
+    try {
+
+      const user = await mongoose.model('User').findOne({username : username});
+
+      if(user){
+        const found = await bcrypt.compare(password, user.password);
+
+        if(found) return user;
+        else throw 'Wrong password';
+
+      }
+      else throw 'User not exists';
+
+    } catch (error) {
+        throw error;
+    }
   
-    mongoose.model('User').findOne({username : this.username}, function(err, doc){
-
-        if(doc){
-            bcrypt.compare(insertedPassword, doc.password, function(err, result){
-
-                return  cb(err, result);
-             
-             });
-            
-        } 
-        else {
-            return cb(err, null) ;
-        }
-    
-    })
-
   }
 
 
