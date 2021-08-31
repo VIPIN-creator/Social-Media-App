@@ -35,17 +35,9 @@ const UserSchema = new mongoose.Schema({
 //     return mongoose.model('User').find({ username: this.username }, cb);
 // };
 
-UserSchema.pre('save', function(next){
-
-    bcrypt.hash(this.password, 12, (err, hash) =>{
-        if(err) console.log("error in hashing password", err);
-
-        this.password = hash;
-
-        next();
-    }); 
-    
-
+UserSchema.pre('save', async function(){
+        const hash = await bcrypt.hash(this.password, 12); 
+        this.password = hash;   
 });
 
 UserSchema.methods.findUser = async function(username, password){
