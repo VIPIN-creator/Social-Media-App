@@ -58,4 +58,9 @@ exports.LoginUser = async(req, res) => {
     
 }
 
+exports.LogoutUser = (req, res) => {
+    res.cookie('jwt', '', {maxAge: 1});
+    res.render('home-guest');
+}
+
 
