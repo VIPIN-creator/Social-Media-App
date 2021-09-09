@@ -6,7 +6,7 @@ const User = require('./models/User');
 const {RegisterUser, LoginUser, LogoutUser} = require('./controllers/userController');
 
 // always check the user for any route request
-router.all('*', (req, res, next) => {
+router.get('*', (req, res, next) => {
     const token = req.cookies.jwt;
 
     if(token){
@@ -18,11 +18,13 @@ router.all('*', (req, res, next) => {
             else{
                 let user = await User.findById(decodedToken.id);
                 res.locals.user = user;
+                console.log('token checked at * ');
                 next();
             }
         });
     } 
     else{
+        console.log('No token found');
         res.locals.user = null;
         res.render('home-guest');
     }
@@ -35,8 +37,17 @@ router.get('/', (req, res) => {
 
 router.post('/login', LoginUser);
 
-router.post('/register', RegisterUser);
+router.post('/register', RegisterUser,
+(req, res) => {
+    
+    res.redirect(200, '/dashboard');
+});
 
 router.get('/logout',LogoutUser);
+
+router.get('/dashboard', (req, res) => {
+    res.render('home-dashboard');
+});
+
 
 module.exports = router;

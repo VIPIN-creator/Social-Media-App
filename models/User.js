@@ -12,11 +12,14 @@ const UserSchema = new mongoose.Schema({
         maxLength : [8,  "Maximum length of username must be 8"],
     },
 
-    password : String, 
+    password :{ 
+      type : String,
+      required : ['true', 'Username must not be empty']
+    }, 
 
     email : {
         type : String, 
-        required : ['true', 'Password must not be empty' ],
+        required : ['true', 'Email must not be empty' ],
         unique : true,
         dropDups: true,
         lowercase : true,

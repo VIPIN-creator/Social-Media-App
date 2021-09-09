@@ -10,7 +10,9 @@ const createToken = (id) => {
     });
 };
 
-exports.RegisterUser = async (req, res) => {
+exports.RegisterUser = async (req, res, next) => {
+
+    console.log(req.body);
 
     try {
         const user = new User(req.body);
@@ -18,7 +20,7 @@ exports.RegisterUser = async (req, res) => {
         const oldUser = await User.findOne({ $or : [{'username' : user.username}, {'email' : user.email}  ] });
 
         if(oldUser){
-            res.status(406).send('User already exist');
+            return res.status(406).send('User already exist');
         }
         
         let newUser = await user.save();
@@ -26,13 +28,20 @@ exports.RegisterUser = async (req, res) => {
         if(newUser){
             
             const token = createToken(newUser._id);
-            res.cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 });
+            res.status(200).cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 });
+
+            console.log('new user added');
           
-            res.status(201).send('successful');
+            // res.redirect('home-dashboard.ejs');
+            next();
+          
+            // console.log("YAY");
+            
         }
-        else throw 'error';
+        else throw 'error new user not found';
     } 
     catch (error) {
+        if(error)console.log('error in backend registering user', error);
         res.status(406).send(error);
     }
         
@@ -40,6 +49,8 @@ exports.RegisterUser = async (req, res) => {
 
 
 exports.LoginUser = async(req, res) => {
+
+    console.log(req.body);
 
     try {
 
@@ -50,7 +61,7 @@ exports.LoginUser = async(req, res) => {
         res.cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 });
 
 
-        res.status(201).send(user);
+        res.render('home-dashboard');
         
     } catch (error) {
         res.status(406).send(error);
