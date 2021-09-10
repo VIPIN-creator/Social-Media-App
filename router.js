@@ -31,23 +31,17 @@ router.get('*', (req, res, next) => {
 });
 
 router.get('/', (req, res) => {
-        res.render('home-dashboard');
-   
+        res.redirect('/dashboard');
 });
 
 router.post('/login', LoginUser);
 
-router.post('/register', RegisterUser,
-(req, res) => {
-    
-    res.redirect(200, '/dashboard');
-});
+router.post('/register', RegisterUser);
 
 router.get('/logout',LogoutUser);
 
 router.get('/dashboard', (req, res) => {
     res.render('home-dashboard');
-});
-
+})
 
 module.exports = router;

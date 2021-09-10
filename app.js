@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
 const routes = require('./router');
+const cors = require('cors');
 //  initiate dotenv and make your environment variables available throughout your application
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
@@ -13,6 +14,7 @@ dotenv.config();
 app.use(express.static('public'));
 app.use(express.json()); // to parse JSON bodies
 app.use(cookieParser());
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, '/views'));

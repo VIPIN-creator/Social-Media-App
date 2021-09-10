@@ -26,14 +26,54 @@
 
     <div class="collapse navbar-collapse justify-content-end " id="navbarSupportedContent">
       
-      <form class="d-flex my-2 my-lg-0 " action="/login" method="POST"  >
-        <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username">
-        <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password">
-        <button class="btn btn-outline-dark" type="Button">Login</button>
+      <form action='/login' class="d-flex my-2 my-lg-0 "  method="POST" id ="loginForm" >
+        <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
+        <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password">
+        <button class="btn btn-outline-dark" type="submit">Login</button>
       </form>
     </div>
     
   </div>
 </nav>
 
+<script>
+  const form = document.querySelector('#loginForm');
 
+ form.addEventListener('submit', async (e) => {
+   e.preventDefault();
+  
+  
+   const password = form.password.value;
+   const username = form.username.value;
+
+   console.log('data', password, username);
+
+   try {
+     const res = await fetch('/login', { 
+       method: 'POST', 
+       body: JSON.stringify({password, username }), // convert the data object to json string
+       headers: {'Content-Type': 'application/json'},
+       mode : 'cors',
+       redirect : 'follow'
+     });
+
+     if(res.status == 200){
+       const data = await res.json();
+
+       console.log(data.errors);
+
+       if(data.success) window.location.replace('/dashboard');
+       else {console.log(data.errors); throw Error(data.errors);}
+     }
+     else{
+       throw Error({status : res.status});
+     }
+
+
+   }
+   catch (err) {
+     console.log('there is a error in sending the data ', err);
+   }
+ });
+
+</script>

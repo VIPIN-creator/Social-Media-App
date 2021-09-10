@@ -10,7 +10,7 @@ const createToken = (id) => {
     });
 };
 
-exports.RegisterUser = async (req, res, next) => {
+exports.RegisterUser = async (req, res) => {
 
     console.log(req.body);
 
@@ -28,15 +28,13 @@ exports.RegisterUser = async (req, res, next) => {
         if(newUser){
             
             const token = createToken(newUser._id);
-            res.status(200).cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 });
+            res
+                .status(200)
+                .cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 })
+                .json({success : true});
 
             console.log('new user added');
           
-            // res.redirect('home-dashboard.ejs');
-            next();
-          
-            // console.log("YAY");
-            
         }
         else throw 'error new user not found';
     } 
@@ -58,10 +56,14 @@ exports.LoginUser = async(req, res) => {
         await user.findUser(req.body.username, req.body.password);
 
         const token = createToken(user._id);
-        res.cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 });
+        res
+            .status(200)
+            .cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 })
+            .json({success : true});
 
+        console.log('user logged in');
 
-        res.render('home-dashboard');
+        
         
     } catch (error) {
         res.status(406).send(error);
