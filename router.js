@@ -18,6 +18,7 @@ router.get('*', (req, res, next) => {
             else{
                 let user = await User.findById(decodedToken.id);
                 res.locals.user = user;
+                console.log('locals ', res.locals.user);
                 console.log('token checked at * ');
                 next();
             }
@@ -42,6 +43,12 @@ router.get('/logout',LogoutUser);
 
 router.get('/dashboard', (req, res) => {
     res.render('home-dashboard');
+})
+
+router.get('/create_post', (req, res) => {
+    res
+        .status(200)
+        .render('create-post.ejs');
 })
 
 module.exports = router;

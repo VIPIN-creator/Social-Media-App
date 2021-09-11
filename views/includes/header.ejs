@@ -1,79 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <!-- JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    
-    <title>OurApp</title>
-</head>
-<body>
-<nav class="navbar navbar-expand-md navbar-dark" style="background-color: #dc3525;">
-  <div class="container-fluid ">
-    <a class="navbar-brand" href="#">Our App</a>
-    
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+        <!-- JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        
+        <title>OurApp</title>
+    </head>
+    <body>
 
-    <div class="collapse navbar-collapse justify-content-end " id="navbarSupportedContent">
-      
-      <form action='/login' class="d-flex my-2 my-lg-0 "  method="POST" id ="loginForm" >
-        <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
-        <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password">
-        <button class="btn btn-outline-dark" type="submit">Login</button>
-      </form>
-    </div>
-    
-  </div>
-</nav>
+      <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #dc3525;">
+      <div class="container-fluid ">
+        <a class="navbar-brand" href="#">Our App</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-<script>
-  const form = document.querySelector('#loginForm');
+        <div class="collapse navbar-collapse justify-content-end " id="navbarSupportedContent">
 
- form.addEventListener('submit', async (e) => {
-   e.preventDefault();
-  
-  
-   const password = form.password.value;
-   const username = form.username.value;
+          <% if(user) { %>
+            <form action='/logout' class="my-2 my-lg-0"  method="GET" id ="logoutForm" >
+              <!-- <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
+              <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password"> -->
+              <button class="btn post btn-success" type="button">Create Post</button>
 
-   console.log('data', password, username);
+              <button class="btn  btn-outline-dark" type="submit">Logout</button>
+            </form>
+          <% } else { %>
+            <form action='/login' class="d-flex my-2 my-lg-0 "  method="POST" id ="loginForm" >
+              <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
+              <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password">
+              <button class="btn btn-outline-dark" type="submit">Login</button>
+            </form>
+          <% } %>
+        </div>
+        
+      </div>
+    </nav>
 
-   try {
-     const res = await fetch('/login', { 
-       method: 'POST', 
-       body: JSON.stringify({password, username }), // convert the data object to json string
-       headers: {'Content-Type': 'application/json'},
-       mode : 'cors',
-       redirect : 'follow'
-     });
+    <script>
+      console.log('Login Form');
 
-     if(res.status == 200){
-       const data = await res.json();
+      const login = document.querySelector('#loginForm');
+      const logout = document.querySelector('#logoutForm');
 
-       console.log(data.errors);
+      if(logout) {
+          logout.addEventListener('submit', async(e) => {
+          e.preventDefault();
 
-       if(data.success) window.location.replace('/dashboard');
-       else {console.log(data.errors); throw Error(data.errors);}
-     }
-     else{
-       throw Error({status : res.status});
-     }
+          try {
+          const res = await fetch('/logout', { 
+            method: 'GET', 
+            headers: {'Content-Type': 'application/json'},
+            mode : 'cors',
+            redirect : 'follow'
+          });
+
+          if(res.status == 200){
+            const data = await res.json();
 
 
-   }
-   catch (err) {
-     console.log('there is a error in sending the data ', err);
-   }
- });
+            if(data.success) window.location.assign('/');
+            else {console.log('error in data sent for logging out front-end', data.errors); throw Error(data.errors);}
+          }
+          else{
+            throw Error({status : res.status});
+          }
+        }
+        catch (err) {
+          console.log('there is a error in sending the data ', err);
+        }
 
-</script>
+        });
+
+        const post = document.querySelector('.post');
+
+        post.addEventListener('click', async(e) => {
+          e.preventDefault();
+
+          try {
+            const res = await fetch('/create_post', {
+              method : 'GET',
+              headers: {'Content-Type': 'application/json'},
+              mode : 'cors',
+              redirect : 'follow'
+            });
+
+            if(res.status == 200){
+             window.location.assign('/create_post');
+            }
+            else{
+              throw Error({status : res.status});
+            }
+            
+          } catch (err) {
+            console.log('there is a error in sending the data ', err);
+          }
+
+        })
+
+      }
+
+
+      if(login){
+        login.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        
+        const password = login.password.value;
+        const username = login.username.value;
+
+        console.log('data', password, username);
+
+        try {
+          const res = await fetch('/login', { 
+            method: 'POST', 
+            body: JSON.stringify({password, username }), // convert the data object to json string
+            headers: {'Content-Type': 'application/json'},
+            mode : 'cors',
+            redirect : 'follow'
+          });
+
+          if(res.status == 200){
+            const data = await res.json();
+
+
+            if(data.success) window.location.assign('/dashboard');
+            else {console.log('error in data sent for logging in front-end', data.errors); throw Error(data.errors);}
+          }
+          else{
+            throw Error({status : res.status});
+          }
+
+
+        }
+        catch (err) {
+          console.log('there is a error in sending the data ', err);
+        }
+      });
+      }
+
+    </script>

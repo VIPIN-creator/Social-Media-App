@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 4000;
 // connect to db
 mongoose.connect(`${process.env.DATABASEURL}`,{useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
         .then(app.listen(PORT, () => console.log(`server is running on port ${PORT}`)))
-        .catch(e => console.log(e))
+        .catch(e => console.log('error in conneting to db ', e))
 
 
 // routes

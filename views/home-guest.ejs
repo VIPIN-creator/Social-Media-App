@@ -35,6 +35,7 @@
 
 <script>
    console.log('Yes');
+  
   const form = document.querySelector('#formArray');
  
   form.addEventListener('submit', async (e) => {
@@ -60,8 +61,7 @@
       if(res.status == 200){
         const data = await res.json();
 
-        console.log(data.errors);
-
+        
         if(data.success) window.location.replace('/dashboard');
         else {console.log(data.errors); throw Error(data.errors);}
       }

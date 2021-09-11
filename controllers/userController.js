@@ -5,14 +5,14 @@ const jwt = require('jsonwebtoken');
 // create json web token
 const maxAge =  3* 24 * 60 * 60;
 const createToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_PRIVATE_KEY, {
+    return jwt.sign({id : id}, process.env.JWT_PRIVATE_KEY, {
         expiresIn : maxAge
     });
 };
 
 exports.RegisterUser = async (req, res) => {
 
-    console.log(req.body);
+    console.log('registering user data ', req.body);
 
     try {
         const user = new User(req.body);
@@ -48,14 +48,14 @@ exports.RegisterUser = async (req, res) => {
 
 exports.LoginUser = async(req, res) => {
 
-    console.log(req.body);
+    console.log('logging user data ', req.body);
 
     try {
 
         const user = new User(req.body);
-        await user.findUser(req.body.username, req.body.password);
+         const newUser = await user.findUser(req.body.username, req.body.password);
 
-        const token = createToken(user._id);
+        const token = createToken(newUser._id);
         res
             .status(200)
             .cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 })
@@ -72,8 +72,11 @@ exports.LoginUser = async(req, res) => {
 }
 
 exports.LogoutUser = (req, res) => {
-    res.cookie('jwt', '', {maxAge: 1});
-    res.render('home-guest');
+    res
+        .status(200)
+        .cookie('jwt', '', {maxAge: 1})
+        .json({success : true})
+        .redirect('/');
 }
 
 
