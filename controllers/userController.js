@@ -10,6 +10,32 @@ const createToken = (id) => {
     });
 };
 
+
+const handleErrors = (err) => {
+    let errors = {email: '', password: '', username: ''};
+
+    if(err.code == 11000){
+       if( err.keyPattern.username == 1) errors.username = 'That username is already registered ';
+       if( err.keyPattern.email == 1) errors.email = 'That email is already registered ';
+
+       return errors;
+
+    }
+
+    if(err.message && err.message.includes('User validation failed')){
+        Object.values(err.errors).forEach(({properties}) => {
+            errors[properties.path] = properties.message;
+        });
+
+        return errors;
+    }
+
+   
+    if(err){ return err};
+
+
+}
+
 exports.RegisterUser = async (req, res) => {
 
     console.log('registering user data ', req.body);
@@ -17,12 +43,6 @@ exports.RegisterUser = async (req, res) => {
     try {
         const user = new User(req.body);
 
-        const oldUser = await User.findOne({ $or : [{'username' : user.username}, {'email' : user.email}  ] });
-
-        if(oldUser){
-            return res.status(406).send('User already exist');
-        }
-        
         let newUser = await user.save();
 
         if(newUser){
@@ -40,7 +60,8 @@ exports.RegisterUser = async (req, res) => {
     } 
     catch (error) {
         if(error)console.log('error in backend registering user', error);
-        res.status(406).send(error);
+        const errors = handleErrors(error);
+        res.status(400).json({errors});
     }
         
 }
@@ -66,7 +87,9 @@ exports.LoginUser = async(req, res) => {
         
         
     } catch (error) {
-        res.status(406).send(error);
+        if(error)console.log('error in backend logging in user', error);
+        const errors = handleErrors(error);
+        res.status(400).json({errors});
     }
     
 }

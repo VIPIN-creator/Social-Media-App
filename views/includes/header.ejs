@@ -37,8 +37,11 @@
             </form>
           <% } else { %>
             <form action='/login' class="d-flex my-2 my-lg-0 "  method="POST" id ="loginForm" >
+              
               <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
+             
               <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password">
+              
               <button class="btn btn-outline-dark" type="submit">Login</button>
             </form>
           <% } %>
@@ -52,6 +55,7 @@
 
       const login = document.querySelector('#loginForm');
       const logout = document.querySelector('#logoutForm');
+     
 
       if(logout) {
           logout.addEventListener('submit', async(e) => {
@@ -65,15 +69,18 @@
             redirect : 'follow'
           });
 
-          if(res.status == 200){
-            const data = await res.json();
+          
 
+          if(res.status == 200){
+           
+            const data = await res.json();
 
             if(data.success) window.location.assign('/');
             else {console.log('error in data sent for logging out front-end', data.errors); throw Error(data.errors);}
           }
           else{
-            throw Error({status : res.status});
+            console.log('error in data sent for logging out front-end',);
+            // form_error.textContent = data.email_error;
           }
         }
         catch (err) {
@@ -118,6 +125,8 @@
         
         const password = login.password.value;
         const username = login.username.value;
+       
+
 
         console.log('data', password, username);
 
@@ -130,17 +139,19 @@
             redirect : 'follow'
           });
 
-          if(res.status == 200){
+        
             const data = await res.json();
 
+            if(data.errors){
+              alert(data.errors);
+              // if(data.errors.password) password_error.textContent = 'Password Must not be empty.'
+
+              console.log('errors detected in front-end', data.errors);
+            }
 
             if(data.success) window.location.assign('/dashboard');
-            else {console.log('error in data sent for logging in front-end', data.errors); throw Error(data.errors);}
-          }
-          else{
-            throw Error({status : res.status});
-          }
-
+           
+         
 
         }
         catch (err) {

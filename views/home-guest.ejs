@@ -10,20 +10,24 @@
 
         <div class="col-lg-4 col-md-4 col-sm-12" >
             <form action = '/register' method = "POST" id = "formArray">
+            
                 <div class="mb-3">
                   <label for="username" class="form-label">Username</label>
                   <input type="text" class="form-control" name = "username" id="username">
                 </div>
+                <div class="username error mb-3" ></div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" name="email" id="email">
                   </div>
+                <div class="email error mb-3" ></div>
 
                 <div class="mb-3">
                   <label for="password" class="form-label">Password</label>
                   <input type="password" class="form-control" name="password" id="password">
                 </div>  
+                <div class="password error mb-3" ></div>
 
                 <button type="submit" class="btn btn-success btn-block" name = "submit">Submit</button>
               </form>
@@ -33,10 +37,15 @@
 
 </div>
 
+
 <script>
    console.log('Yes');
   
   const form = document.querySelector('#formArray');
+  const username_error = document.querySelector('.username.error');
+  const password_error = document.querySelector('.password.error');
+  const email_error = document.querySelector('.email.error');
+
  
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -49,6 +58,10 @@
 
     console.log('data', email, password, username);
 
+    username_error.textContent = '';
+    password_error.textContent = '';
+    email_error .textContent = '';
+
     try {
       const res = await fetch('/register', { 
         method: 'POST', 
@@ -58,21 +71,31 @@
         redirect : 'follow'
       });
 
-      if(res.status == 200){
-        const data = await res.json();
+      const data = await res.json();
+     
 
+      console.log(data);
+
+      if(data.errors){
+        username_error.textContent = data.errors.username;
+        email_error .textContent = data.errors.email;
+
+        if(data.errors.password) password_error.textContent = 'Password Must not be empty.'
+
+        console.log('errors detected in front-end', data.errors);
+      }
+
+      if(data.success){             
+        window.location.replace('/dashboard');
         
-        if(data.success) window.location.replace('/dashboard');
-        else {console.log(data.errors); throw Error(data.errors);}
       }
-      else{
-        throw Error({status : res.status});
-      }
-
+      
 
     }
     catch (err) {
       console.log('there is a error in sending the data ', err);
+      // console.log('errors detected in front-end', data.email_error);
+
     }
   });
 
