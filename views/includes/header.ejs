@@ -17,9 +17,9 @@
     </head>
     <body>
 
-      <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #dc3525;">
+    <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #dc3525;">
       <div class="container-fluid ">
-        <a class="navbar-brand" href="#">Our App</a>
+        <a class="navbar-brand" href="/">Our App</a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -27,7 +27,13 @@
 
         <div class="collapse navbar-collapse justify-content-end " id="navbarSupportedContent">
 
+          <ul class="navbar-nav mr-auto">
+            <li>
+              <% if((locals.gravatar)) { %><img class="image img-fluid" src =' <%= locals.gravatar  %>?s=50 '/> <% } %>
+            </li class="nav-item" >
+          </ul>
           <% if(user) { %>
+           
             <form action='/logout' class="my-2 my-lg-0"  method="GET" id ="logoutForm" >
               <!-- <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
               <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password"> -->
@@ -36,7 +42,7 @@
               <button class="btn  btn-outline-dark" type="submit">Logout</button>
             </form>
           <% } else { %>
-            <form action='/login' class="d-flex my-2 my-lg-0 "  method="POST" id ="loginForm" >
+            <form action='/login' class="my-2 my-lg-0 "  method="POST" id ="loginForm" >
               
               <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
              
@@ -55,12 +61,25 @@
 
       const login = document.querySelector('#loginForm');
       const logout = document.querySelector('#logoutForm');
+
+      
      
 
       if(logout) {
+
+          // const md5 = (value) => {
+          //   return CryptoJS.MD5(value).toString(); 
+          // }
+
+          // const hash = md5(user.email);
+
+          // $('.image').attr('src', "https://www.gravatar.com/avatar/"+hash+".jpg");
+
+          // console.log(user);
+
           logout.addEventListener('submit', async(e) => {
           e.preventDefault();
-
+            
           try {
           const res = await fetch('/logout', { 
             method: 'GET', 

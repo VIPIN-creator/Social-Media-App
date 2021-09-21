@@ -1,5 +1,6 @@
 const User = require('../models/User');
 
+
 const jwt = require('jsonwebtoken');
 
 // create json web token
@@ -48,6 +49,10 @@ exports.RegisterUser = async (req, res) => {
         if(newUser){
             
             const token = createToken(newUser._id);
+
+            
+          
+
             res
                 .status(200)
                 .cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 })

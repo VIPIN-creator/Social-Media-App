@@ -1,5 +1,5 @@
 
-<%- include("includes/header") %>
+<%- include("includes/header") -%>
 
 <div class="container" style="margin: 4em; padding: 1em;" >
 
@@ -85,10 +85,14 @@
         console.log('errors detected in front-end', data.errors);
       }
 
-      if(data.success){             
-        window.location.replace('/dashboard');
+      if(data.success){         
+        // console.log(data.hash+'.jpg');
+         window.location.assign('/dashboard');
+        // $('.image').attr('src', data.hash+'.jpg');
+
         
       }
+
       
 
     }
@@ -101,6 +105,6 @@
 
 </script>
 
-<%- include("includes/footer") %>
+<%- include("includes/footer") -%>
 
 
