@@ -104,7 +104,7 @@ exports.LogoutUser = (req, res) => {
         .status(200)
         .cookie('jwt', '', {maxAge: 1})
         .json({success : true})
-        .redirect('/');
+        
 }
 
 

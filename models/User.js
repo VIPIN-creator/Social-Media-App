@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
         validate : [validator.isEmail, 'Please enter a correct email']
     },
 
-    photo : String
+    posts : Array
 });
 
 // // Instance methods

@@ -1,7 +1,7 @@
 <%- include("includes/header") %>
 
 <div class="container">
-    <form action = '' method = "POST" id = "" class="m-5">
+    <form action = '' method = "POST" id = "createPost" class="m-5 ">
                 
         <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -11,8 +11,8 @@
         <div class=" mb-3" ></div>
 
         <div class="mb-3">
-            <label for="content" class="form-label">Body Content</label>
-            <textarea  class="form-control" name="content" id="content" rows="10" cols="20"></textarea>
+            <label for="description" class="form-label">Body Content</label>
+            <textarea  class="form-control" name="description" id="description" rows="10" cols="20"></textarea>
         </div>
 
         <div class="mb-3" ></div>
@@ -21,5 +21,9 @@
 
     </form>
 </div>
+
+<script>
+    const createPost = document.querySelector('#createPost');
+</script>
 
 <%- include("includes/footer") %>

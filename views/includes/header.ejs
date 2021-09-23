@@ -27,12 +27,14 @@
 
         <div class="collapse navbar-collapse justify-content-end " id="navbarSupportedContent">
 
-          <ul class="navbar-nav mr-auto">
-            <li>
-              <% if((locals.gravatar)) { %><img class="image img-fluid" src =' <%= locals.gravatar  %>?s=50 '/> <% } %>
-            </li class="nav-item" >
-          </ul>
+         
           <% if(user) { %>
+
+            <ul class="navbar-nav">
+              <li class="nav-item" >
+                <% if((locals.gravatar)) { %><img class="image img-fluid" src =' <%= locals.gravatar  %>?s=50 '/> <% } %>
+              </li>
+            </ul>
            
             <form action='/logout' class="my-2 my-lg-0"  method="GET" id ="logoutForm" >
               <!-- <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
@@ -42,13 +44,19 @@
               <button class="btn  btn-outline-dark" type="submit">Logout</button>
             </form>
           <% } else { %>
-            <form action='/login' class="my-2 my-lg-0 "  method="POST" id ="loginForm" >
+            <form action='/login' class="form-inline"  method="POST" id ="loginForm" >
+              <div class="form-group row">
+                <div class="col-4 col-form-label" >
+                  <input class="form-control" type="text" placeholder="Username" aria-label="Username" name = "username">
+                </div>
+                <div class="col-4 col-form-label" >  
+                  <input class="form-control " type="password" placeholder="Password" aria-label="Password" name="password">
+                </div>  
+                <div class="col-4 col-form-label" >
+                  <button class="btn btn-outline-dark" type="submit">Login</button>
+                </div>  
+              </div>
               
-              <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
-             
-              <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password">
-              
-              <button class="btn btn-outline-dark" type="submit">Login</button>
             </form>
           <% } %>
         </div>

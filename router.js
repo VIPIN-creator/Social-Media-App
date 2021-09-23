@@ -5,6 +5,7 @@ const User = require('./models/User');
 const md5 = require('md5');
 
 const {RegisterUser, LoginUser, LogoutUser} = require('./controllers/userController');
+const {CreatePost} = require('./controllers/postController');
 
 // always check the user for any route request
 router.get('*', (req, res, next) => {
@@ -60,5 +61,7 @@ router.get('/create_post', (req, res) => {
         .status(200)
         .render('create-post.ejs');
 })
+
+router.post('/create_post', CreatePost);
 
 module.exports = router;
