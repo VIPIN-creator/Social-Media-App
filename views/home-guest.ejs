@@ -79,8 +79,8 @@
       if(data.errors){
         username_error.textContent = data.errors.username;
         email_error .textContent = data.errors.email;
-
-        if(data.errors.password) password_error.textContent = 'Password Must not be empty.'
+        password_error.textContent = data.errors.password;
+        // if(data.errors.password) password_error.textContent = 'Password Must not be empty.'
 
         console.log('errors detected in front-end', data.errors);
       }

@@ -4,12 +4,12 @@ const mongoose = require('mongoose');
 const PostSchema = new mongoose.Schema({
     title : {
         type : String,
-        required : ['true', 'Title is required'],       
+        required : [true, 'Title is required'],       
     },
 
     description : {
         type : String,
-        required : ['true', 'Body-Content is required'],
+        required : [true, 'Body Content is required'],
     },
 
     date : Date,

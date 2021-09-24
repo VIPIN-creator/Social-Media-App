@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
     username : {
         type : String,
-        required : ['true', 'Username must not be empty'],
+        required : [true, 'Username must not be empty'],
         unique : true ,
         dropDups : true,
         minLength : [3, "Minimum length of username must be 3"],
@@ -14,19 +14,23 @@ const UserSchema = new mongoose.Schema({
 
     password :{ 
       type : String,
-      required : ['true', 'Password must not be empty']
+      required : [true, 'Password must not be empty']
     }, 
 
     email : {
         type : String, 
-        required : ['true', 'Email must not be empty' ],
+        required : [true, 'Email must not be empty' ],
         unique : true,
         dropDups: true,
         lowercase : true,
         validate : [validator.isEmail, 'Please enter a correct email']
     },
 
-    posts : Array
+    posts : Array,
+
+    followers : Array, 
+
+    following : Array
 });
 
 // // Instance methods

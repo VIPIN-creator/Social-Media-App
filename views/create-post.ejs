@@ -1,21 +1,20 @@
 <%- include("includes/header") %>
 
 <div class="container">
-    <form action = '' method = "POST" id = "createPost" class="m-5 ">
+    <form action = '/create_post' method = "POST" id = "createPost" class="m-5 ">
                 
         <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
-        <input type="text" class="form-control" name = "title" id="title">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" name = "title" id="title">
+           
         </div>
-
-        <div class=" mb-3" ></div>
+        <div class="title_error mb-3" ></div>
 
         <div class="mb-3">
             <label for="description" class="form-label">Body Content</label>
-            <textarea  class="form-control" name="description" id="description" rows="10" cols="20"></textarea>
+            <textarea type="text" class="form-control" name="description" id="description" rows="10" cols="20"></textarea>
         </div>
-
-        <div class="mb-3" ></div>
+        <div class="description_error mb-3" ></div>
 
         <button type="submit" class="btn btn-success btn-block" name = "submit">Save New Post</button>
 
@@ -24,6 +23,47 @@
 
 <script>
     const createPost = document.querySelector('#createPost');
+    const title_error = document.querySelector('.title_error');
+    const description_error = document.querySelector('.description_error');
+
+    createPost.addEventListener('submit', async(e) => {
+        e.preventDefault();
+
+        const title = createPost.title.value;
+        const description = createPost.description.value;
+
+        title_error.textContent = '';
+        description_error.textContent = '';
+
+        try{
+            const res = await fetch('/create_post', {
+                method: 'POST', 
+                body: JSON.stringify({title, description }), // convert the data object to json string
+                headers: {'Content-Type': 'application/json'},
+                mode : 'cors',
+                redirect : 'follow'
+            });
+
+            const data = await res.json();
+
+            if(data.errors){
+                title_error.textContent = data.errors.title;
+                description_error.textContent = data.errors.description;
+            }
+
+            console.log(data.success);
+
+            if(data.success){
+                window.location.assign('/dashboard');
+            }
+
+        }
+        catch(err){
+            console.log('there is error in sendind data to front create post', err);
+        }
+
+    })
+
 </script>
 
 <%- include("includes/footer") %>

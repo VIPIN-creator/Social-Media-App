@@ -2,10 +2,23 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
+const handleErrors = (err) => {
+    let errors = {title : '', description : ''};
+
+    if(err.message && err.message.includes('Post validation failed')){
+        Object.values(err.errors).forEach(({properties}) => {
+            errors[properties.path] = properties.message;
+        });
+
+        return errors;
+    }
+
+    if(err){ return err};
+}
 
 
 exports.CreatePost = async(req, res) => {
-  
+  console.log('received data is ', req.body);
     const token = req.cookies.jwt;
 
     if(token){
@@ -42,7 +55,8 @@ exports.CreatePost = async(req, res) => {
 
         } catch (error) {
             console.log("post can't be created", error);
-            res.sendStatus(400);
+            const errors = handleErrors(error);
+            res.status(400).json({errors});
         }
 
     }
