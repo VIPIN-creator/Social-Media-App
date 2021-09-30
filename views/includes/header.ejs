@@ -17,8 +17,8 @@
     </head>
     <body>
 
-    <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #dc3525;">
-      <div class="container-fluid ">
+    <nav class="navbar navbar-expand-md navbar-dark container-fluid " style="background-color: #dc3525;">
+     
         <a class="navbar-brand" href="/">Our App</a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,20 +29,32 @@
 
          
           <% if(user) { %>
+            <div class="row">
+              <div class="col-auto" >
+              <form action="/user" method="POST" class="" id = "search">
+                <div class="input-group">
+                  <input name="user" type="text" class="form-control" placeholder="Search by Username" aria-label="user" aria-describedby="basic-addon1">
+                  <div class="input-group-prepend">
+                    <button type = "submit" class="input-group-text" id="basic-addon1">🔍</button>
+                  </div>
+                </div>
+              </form>
+            </div>
 
-            <ul class="navbar-nav">
-              <li class="nav-item" >
-                <% if((locals.gravatar)) { %><img class="image img-fluid" src =' <%= locals.gravatar  %>?s=50 '/> <% } %>
-              </li>
-            </ul>
-           
-            <form action='/logout' class="my-2 my-lg-0"  method="GET" id ="logoutForm" >
-              <!-- <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
-              <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password"> -->
-              <button class="btn post btn-success" type="button">Create Post</button>
+            <div class="col-auto" >
+              <% if((user.pic)) { %><a><img class="image img-fluid" src =' <%= user.pic  %>?s=45 '/></a> <% } %>
+            </div>
 
-              <button class="btn  btn-outline-dark" type="submit">Logout</button>
-            </form>
+            <div class="col-auto" >
+              <form action='/logout' class=""  method="GET" id ="logoutForm" >
+                <!-- <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
+                <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password"> -->
+                <button class="btn post btn-success" type="button">Create Post 📝</button>
+
+                <button class="btn  btn-outline-dark" type="submit">Logout 🔓 </button>
+              </form>
+            </div>
+            </div>
           <% } else { %>
             <form action='/login' class="form-inline"  method="POST" id ="loginForm" >
               <div class="form-group row">
@@ -53,15 +65,13 @@
                   <input class="form-control " type="password" placeholder="Password" aria-label="Password" name="password">
                 </div>  
                 <div class="col-4 col-form-label" >
-                  <button class="btn btn-outline-dark" type="submit">Login</button>
+                  <button class="btn btn-outline-dark" type="submit">Login 🔒 </button>
                 </div>  
               </div>
               
             </form>
           <% } %>
         </div>
-        
-      </div>
     </nav>
 
     <script>
@@ -74,16 +84,6 @@
      
 
       if(logout) {
-
-          // const md5 = (value) => {
-          //   return CryptoJS.MD5(value).toString(); 
-          // }
-
-          // const hash = md5(user.email);
-
-          // $('.image').attr('src', "https://www.gravatar.com/avatar/"+hash+".jpg");
-
-          // console.log(user);
 
           logout.addEventListener('submit', async(e) => {
           e.preventDefault();
@@ -140,7 +140,45 @@
             console.log('there is a error in sending the data ', err);
           }
 
-        })
+        });
+
+        const search = document.querySelector('#search');
+
+        search.addEventListener('submit', async(e)=>{
+          e.preventDefault();
+
+          const userName = search.user.value;
+
+          console.log('entered user name is', userName);
+
+          try {
+            const res = await fetch('/user', {
+              method : 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body :JSON.stringify({userName}),
+              mode : 'cors',
+              redirect : 'follow'
+            });
+
+          
+              const data = await res.json();
+
+             
+                if(res.status == 200 && data.success == true){
+                  window.location.assign('/user');
+                }
+                else{
+                  alert('No user exists with this username');
+                }
+             
+
+           
+
+          } catch (error) {
+            console.log('there is error in sending data to front-end', error);
+          }
+
+        });
 
       }
 

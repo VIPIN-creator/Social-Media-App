@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const md5 = require('md5');
 
 const UserSchema = new mongoose.Schema({
     username : {
@@ -30,7 +31,9 @@ const UserSchema = new mongoose.Schema({
 
     followers : Array, 
 
-    following : Array
+    following : Array,
+
+    pic : String
 });
 
 // // Instance methods
@@ -45,6 +48,11 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre('save', async function(){
         const hash = await bcrypt.hash(this.password, 12); 
         this.password = hash;   
+
+        const address = String(this.email).trim().toLowerCase();
+        const hash2 = md5( address );
+        this.pic = `https://www.gravatar.com/avatar/${ hash2 }`;
+
 });
 
 UserSchema.methods.findUser = async function(username, password){

@@ -50,9 +50,6 @@ exports.RegisterUser = async (req, res) => {
             
             const token = createToken(newUser._id);
 
-            
-          
-
             res
                 .status(200)
                 .cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 })
@@ -88,9 +85,7 @@ exports.LoginUser = async(req, res) => {
             .json({success : true});
 
         console.log('user logged in');
-
-        
-        
+               
     } catch (error) {
         if(error)console.log('error in backend logging in user', error);
         const errors = handleErrors(error);
@@ -105,6 +100,54 @@ exports.LogoutUser = (req, res) => {
         .cookie('jwt', '', {maxAge: 1})
         .json({success : true})
         
+}
+
+exports.SearchUser = async(req, res) => {
+    const userName = req.body.userName;
+    console.log('searched userName is ', userName);
+
+    const token = req.cookies.jwt;
+
+    if(token){
+        try {
+            const user = jwt.verify(token, process.env.JWT_PRIVATE_KEY);    
+
+            if(user.id){
+
+                const found = await User.findOne({username : userName});
+
+                if(found){
+                    console.log('found user is, ', found);
+                    res.locals.searchedUser = found;
+
+                    res
+                        .status(200)
+                        .json({success : true});
+                }
+                else{
+
+                    res
+                        .status(200)
+                        .json({success : false});
+                }
+
+            }else{
+                res.locals.user = null;
+               
+                res.redirect('/');            
+            }
+
+        } catch (error) {
+                console.log("Can't search the user");
+             res.status(400).json();
+        }
+    }
+    else{
+        res.status(401).send('please login to search for a user');
+    }
+
+    
+
 }
 
 

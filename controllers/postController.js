@@ -35,11 +35,6 @@ exports.CreatePost = async(req, res) => {
 
                 await User.findOneAndUpdate({_id : user.id}, {$push : {posts : newPost._id}} );
 
-            //    if(foundUser){
-            //        console.log('post is added to user');
-            //    }
-               
-                   
                 res
                     .status(200)
                     .json({success : true});
@@ -50,7 +45,7 @@ exports.CreatePost = async(req, res) => {
                 res.locals.user = null;
                 res.locals.gravatar = null;
 
-                res.render('home-guest');
+                res.redirect('/');
             }
 
         } catch (error) {
