@@ -1,10 +1,35 @@
 <%- include("includes/header") %>
+<div class="container mt-3" >
 
-<div class="media">
-<%  if(locals.searchedUser) { %> <h1><%= searchedUser.username  %> </h1> <% } %>
-  
+  <div class="row justify-content-between" >
+    <div class="col-auto" >
+      <img class="img-fluid profile" src="" alt="Generic placeholder image">
+      <h3 class="header" ></h3>
+    </div>  
+    <div class="col-auto" >
+      <button class="btn" >Follow</button>
+    </div> 
   </div>
+ 
+
+</div>
 
 
 
 <%- include("includes/footer") %>
+
+<script>
+  // const found = ;  
+
+  const data = JSON.parse(localStorage.getItem('found'));
+
+  const header = document.querySelector('.header');
+  const image = document.querySelector('.profile');
+  image.src = data.found.pic;
+  
+  header.innerHTML = `${data.found.username}`;
+
+  // localStorage.clear();
+  
+  console.log('found user in front ', data.found);
+</script>

@@ -21,12 +21,7 @@ router.get('*', (req, res, next) => {
             else{
                 let user = await User.findById(decodedToken.id);
                 res.locals.user = user;
-
-                // const address = String(user.email).trim().toLowerCase();
-                // // Create an MD5 hash of the final string
-                // const hash = md5( address );
-                // res.locals.gravatar = `https://www.gravatar.com/avatar/${ hash }`;
-                
+                                
                 console.log('locals ', res.locals.user);
                 console.log('token checked at * ');
                 next();

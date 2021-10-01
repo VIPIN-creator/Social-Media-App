@@ -122,7 +122,7 @@ exports.SearchUser = async(req, res) => {
 
                     res
                         .status(200)
-                        .json({success : true});
+                        .json({success : true, found : found });
                 }
                 else{
 
