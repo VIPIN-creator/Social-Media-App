@@ -1,17 +1,17 @@
 <%- include("includes/header") %>
 <div class="container mt-3" >
-
+  <% const searchedUser = locals.searchedUser; %>
   <div class="row justify-content-between" >
     <div class="col-auto" >
-      <img class="img-fluid profile" src="" alt="Generic placeholder image">
-      <h3 class="header" ></h3>
+      <img class="img-fluid profile" src="<%= searchedUser.pic  %>" alt="Generic placeholder image"> 
+      <h3 class="header" ><%= searchedUser.username  %></h3>
     </div>  
     <div class="col-auto" >
-      <button class="btn" >Follow</button>
+      <% const action = user.following.includes(searchedUser._id) ? 'Unfollow' : 'Follow'; %>
+      <button type="submit" class="activity btn btn-primary" data-action="<%= action %>" data-follower="<%= user._id %>" data-following="<%= searchedUser._id %>" ><%= action  %></button>
+      
     </div> 
-  </div>
- 
-
+  </div>  
 </div>
 
 
@@ -19,17 +19,41 @@
 <%- include("includes/footer") %>
 
 <script>
-  // const found = ;  
+ 
+ const button = document.querySelector('.activity');
 
-  const data = JSON.parse(localStorage.getItem('found'));
+ const action = button.getAttribute('data-action');
+ const follower = button.getAttribute('data-follower');
+ const following = button.getAttribute('data-following');
 
-  const header = document.querySelector('.header');
-  const image = document.querySelector('.profile');
-  image.src = data.found.pic;
-  
-  header.innerHTML = `${data.found.username}`;
+ console.log('action is ', action);
 
-  // localStorage.clear();
-  
-  console.log('found user in front ', data.found);
+ 
+   button.addEventListener('click', async(e) => {
+    e.preventDefault();
+    try {
+      
+      const res = await fetch('/activity', {
+        method : 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body :JSON.stringify({action, follower, following}),
+        mode : 'cors',
+        redirect : 'follow'
+      });
+
+      const data = await res.json();
+
+      if(res.status == 200 && data.success == true){
+        console.log('activity done successfully');
+        window.location.reload();
+      }
+
+    } catch (error) {
+      console.log("Can't do the activity");
+    }
+
+   });
+ 
+
+ 
 </script>

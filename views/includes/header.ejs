@@ -165,9 +165,6 @@
 
              
                 if(res.status == 200 && data.success == true){
-                  const found = data.found;
-                  console.log(found);
-                  localStorage.setItem('found', JSON.stringify({found}));
                   window.location.assign('/user');
                 }
                 else{

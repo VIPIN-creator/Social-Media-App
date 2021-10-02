@@ -6,6 +6,7 @@ const User = require('./models/User');
 
 const {RegisterUser, LoginUser, LogoutUser, SearchUser} = require('./controllers/userController');
 const {CreatePost} = require('./controllers/postController');
+const {FollowUnfollow} = require('./controllers/followController');
 
 // always check the user for any route request
 router.get('*', (req, res, next) => {
@@ -60,9 +61,15 @@ router.post('/create_post', CreatePost);
 router.post('/user', SearchUser);
 
 router.get('/user', (req, res) => {
+    const searchedUser = req.cookies.searchedUser;
+    // console.log('user in cookie ',searchedUser);
    res 
         .status(200)
-        .render('user.ejs');
+        .render('user.ejs', {searchedUser});
 });
+
+// router.post('/follow', FollowUser);
+// router.post('/unfollow', UnfollowUser);
+router.post('/activity', FollowUnfollow);
 
 module.exports = router;

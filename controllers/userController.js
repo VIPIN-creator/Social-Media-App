@@ -52,7 +52,7 @@ exports.RegisterUser = async (req, res) => {
 
             res
                 .status(200)
-                .cookie('jwt', token, {httpOnly : true, maxAge : maxAge*1000 })
+                .cookie('jwt', token, {maxAge : maxAge*1000, secure: true, httpOnly : true, sameSite: 'lax' })
                 .json({success : true});
 
             console.log('new user added');
@@ -118,7 +118,7 @@ exports.SearchUser = async(req, res) => {
 
                 if(found){
                     console.log('found user is, ', found);
-                    res.locals.searchedUser = found;
+                    res.cookie('searchedUser',  found);
 
                     res
                         .status(200)
