@@ -22,7 +22,7 @@
                  %>
                 <p class="text-muted" ><img src='<%= post.user_pic %>?s=40' class="img-fluid" alt="user-pic" /> By 
                 
-                <span class="author" ><%= post.user %></span> on <%= date %></p>
+                <a class="author" href=""><%= post.user %></a> on <%= date %></p>
 
             </div>
         </div>
@@ -39,7 +39,42 @@
 </div>
 
 <script>
+    const author = document.querySelectorAll('.author');
     
+    for(var i = 0; i<author.length; i++){
+        const userName = author[i].textContent;
+
+        author[i].addEventListener('click', async(e)=> {
+            e.preventDefault();
+            console.log('value ', userName);
+            try {
+            
+                const res = await fetch('/user', {
+                    method : 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    mode : 'cors',
+                    body : JSON.stringify({userName}),
+                    redirect : 'follow'
+                });
+
+                const data = await res.json();
+
+                        
+                if(res.status == 200 && data.success == true){
+                    window.location.assign('/user');
+                }
+                else{
+                    alert('No user exists with this username');
+                }
+            } catch (error) {
+                console.log('there is error in sending data to front-end', error);
+            }
+            
+
+
+        });
+    }
+
 </script>
 
 <%- include("includes/footer") %>

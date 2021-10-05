@@ -7,11 +7,12 @@
       <img class="img-fluid profile" src="<%= searchedUser.pic  %>" alt="Generic placeholder image"> 
       <h3 class="header" ><%= searchedUser.username  %></h3>
     </div>  
-    <div class="col-auto" >
-      <% const action = user.following.includes(searchedUser._id) ? 'Unfollow' : 'Follow'; %>
-      <button type="submit" class="activity btn btn-primary" data-action="<%= action %>" data-follower="<%= user._id %>" data-following="<%= searchedUser._id %>" ><%= action  %></button>
-      
-    </div> 
+    <% if(user.username !== searchedUser.username ) { %>
+      <div class="col-auto" >
+        <% const action = user.following.includes(searchedUser._id) ? 'Unfollow' : 'Follow'; %>
+        <button type="submit" class="activity btn btn-primary" data-action="<%= action %>" data-follower="<%= user._id %>" data-following="<%= searchedUser._id %>" ><%= action  %></button>    
+      </div> 
+    <% } %>
   </div>  
 </div>
 
@@ -21,11 +22,14 @@
  
  const button = document.querySelector('.activity');
 
+if(button){
+
  const action = button.getAttribute('data-action');
  const follower = button.getAttribute('data-follower');
  const following = button.getAttribute('data-following');
-
  console.log('action is ', action);
+
+ 
 
    button.addEventListener('click', async(e) => {
     e.preventDefault();
@@ -51,7 +55,7 @@
     }
 
    });
- 
+  }
 
  
 </script>
