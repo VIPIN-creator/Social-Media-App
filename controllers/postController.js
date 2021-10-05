@@ -28,12 +28,15 @@ exports.CreatePost = async(req, res) => {
             const user = jwt.verify(token, process.env.JWT_PRIVATE_KEY);    
            
             if(user.id){
+
+                const loggedInUser = await User.findOne({_id : user.id});
+
                 const {title, description} = req.body;
-                const post = new Post({title, description, date : new Date(), user : user.id });
+                const post = new Post({title, description, date : new Date(), user : loggedInUser.username, user_pic : loggedInUser.pic });
 
                 const newPost = await post.save();
 
-                await User.findOneAndUpdate({_id : user.id}, {$push : {posts : newPost._id}} );
+                await User.findOneAndUpdate({_id : user.id}, {$push : {posts : newPost}} );
 
                 res
                     .status(200)
@@ -60,4 +63,38 @@ exports.CreatePost = async(req, res) => {
         res.send(401);
     }
   
+}
+
+exports.LoadDashboard = async(req, res) => {
+    try{
+        const posts = new Array();
+
+        if(res.locals.user.posts.length) posts.push(res.locals.user.posts[res.locals.user.posts.length - 1]);
+    
+        const user = await User.findOne({_id : res.locals.user._id});
+    
+        // user.following.forEach( (f) =>{
+        //     const following = await User.findOne({_id : f});
+        //     post.push(following.posts.slice(-1));
+        // })      
+
+        for(let f of user.following){
+            
+            const following = await User.findOne({_id : f});
+            console.log('following ', following.posts[following.posts.length - 1]);
+            posts.push(following.posts[following.posts.length - 1]);
+        }
+      
+            res
+                .status(200)
+                .render('home-dashboard', {posts});
+
+          
+    }
+    catch(error){
+        console.log(error);
+        res.status(400);
+    }
+   
+
 }

@@ -20,8 +20,8 @@ exports.FollowUnfollow = async(req, res) => {
             await User.findByIdAndUpdate(follower, {$pull : {following : following} });
             await User.findByIdAndUpdate(following, {$pull : {followers : follower} });
             res
-            .status(200)
-            .json({success : true});
+                .status(200)
+                .json({success : true});
         }
         
 

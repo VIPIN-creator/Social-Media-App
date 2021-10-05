@@ -1,6 +1,37 @@
 <%- include("includes/header") %>
 
-<h1 class="dashboard">Dashboard</h1>
+<div class="container mt-3" >
+  <% const posts = locals.posts; console.log( posts); %>
+
+    <% posts.forEach(function(post) { %>
+        <% console.log(post); %>
+        <div class="row mt-3 " >
+            <div class="col" >
+                <h2> <%= post.title %></h2>
+            </div>
+            <div class="col" >
+                <p>Edit</p>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col" >
+                <p>By</p>
+                <img src='<%= post.user_pic %>' class="img-fluid" alt="user-pic" />
+                <p> <%= post.user %> on <%= post.date %></p>
+
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col" >
+                <p><%= post.description %></p>
+            </div>
+        </div>
+
+    <% });%>
+  
+       
+   
+</div>
 
 
 <%- include("includes/footer") %>

@@ -14,7 +14,9 @@ const PostSchema = new mongoose.Schema({
 
     date : Date,
     
-    user : String
+    user : String,
+
+    user_pic : String 
 });
 
 const Post = mongoose.model('Post', PostSchema);

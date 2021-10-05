@@ -122,7 +122,7 @@ exports.SearchUser = async(req, res) => {
 
                     res
                         .status(200)
-                        .json({success : true, found : found });
+                        .json({success : true});
                 }
                 else{
 
@@ -145,9 +145,7 @@ exports.SearchUser = async(req, res) => {
     else{
         res.status(401).send('please login to search for a user');
     }
-
-    
-
 }
+
 
 

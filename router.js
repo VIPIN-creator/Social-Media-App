@@ -5,7 +5,7 @@ const User = require('./models/User');
 
 
 const {RegisterUser, LoginUser, LogoutUser, SearchUser} = require('./controllers/userController');
-const {CreatePost} = require('./controllers/postController');
+const {CreatePost, LoadDashboard} = require('./controllers/postController');
 const {FollowUnfollow} = require('./controllers/followController');
 
 // always check the user for any route request
@@ -46,9 +46,7 @@ router.post('/register', RegisterUser);
 
 router.get('/logout',LogoutUser);
 
-router.get('/dashboard', (req, res) => {   
-    res.render('home-dashboard');
-});
+router.get('/dashboard', LoadDashboard);
 
 router.get('/create_post', (req, res) => {
     res
@@ -66,6 +64,7 @@ router.get('/user', (req, res) => {
    res 
         .status(200)
         .render('user.ejs', {searchedUser});
+       
 });
 
 // router.post('/follow', FollowUser);
