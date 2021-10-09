@@ -1,0 +1,41 @@
+<button class="open-button" onclick="openForm()">Message</button>
+
+
+<div id="container chat" style="  width: 700px; margin: 0 auto;" >
+    <h1>
+      Nodejs + Socket Chat app
+    </h1>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    <div id="chatSection" style="    float: left;
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+">
+      <div class="chat-window" height: 300px;
+      width: 400px;></div>
+      <form class="chat-form">
+        <label class="chat-label">
+          Enter a message:
+          <input type="text" class="chat-input" style="  width: 300px;
+          height: 35px;
+          border: solid 1px #444;" />
+        </label>
+        <input type="submit" class="chat-submit" value="enter" style=" width: 50px;
+        height: 35px;
+        border: solid 1px #444;" />
+      </form>
+    </div>
+</div>
+
+  <!-- <script src="socket.io/socket.io.js"></script> -->
+
+  <script>
+    function openForm() {
+  document.getElementById("chat").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("chat").style.display = "none";
+}
+
+  </script>

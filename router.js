@@ -60,10 +60,15 @@ router.post('/user', SearchUser);
 
 router.get('/user', (req, res) => {
     const searchedUser = req.cookies.searchedUser;
+    const userPosts = req.cookies.userPosts;
+    const followers = req.cookies.userFollowers;
+    const followings = req.cookies.userFollowings;
+
     // console.log('user in cookie ',searchedUser);
+   
    res 
         .status(200)
-        .render('user.ejs', {searchedUser});
+        .render('user.ejs', {searchedUser, userPosts, followers, followings});
        
 });
 

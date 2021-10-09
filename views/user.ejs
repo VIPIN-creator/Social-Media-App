@@ -8,12 +8,107 @@
       <h3 class="header" ><%= searchedUser.username  %></h3>
     </div>  
     <% if(user.username !== searchedUser.username ) { %>
+
+      <div class="col-auto" >
+           
+      </div>
       <div class="col-auto" >
         <% const action = user.following.includes(searchedUser._id) ? 'Unfollow' : 'Follow'; %>
         <button type="submit" class="activity btn btn-primary" data-action="<%= action %>" data-follower="<%= user._id %>" data-following="<%= searchedUser._id %>" ><%= action  %></button>    
       </div> 
     <% } %>
   </div>  
+</div>
+
+<div class="container ">
+  <ul class="nav nav-tabs m-5" id="myTab" role="tablist">
+    <li class="nav-item mx-auto" role="presentation">
+      <% const userPosts = locals.userPosts; %>
+      <button class="nav-link active" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab" aria-controls="posts" aria-selected="true">Posts  <span class="ms-2   badge bg-primary"><%= userPosts.length %></span></button>   
+    </li>
+    <li class="nav-item mx-auto" role="presentation">
+      <button class="nav-link" id="followers-tab" data-bs-toggle="tab" data-bs-target="#followers" type="button" role="tab" aria-controls="followers" aria-selected="false">Followers <span class="ms-2 totalFollowers  badge bg-primary"><%= locals.followers.length %></span></button>
+    </li>
+    <li class="nav-item mx-auto" role="presentation">
+      <button class="nav-link" id="following-tab" data-bs-toggle="tab" data-bs-target="#following" type="button" role="tab" aria-controls="following" aria-selected="false">Followings <span class="ms-2   badge bg-primary"><%= locals.followings.length %></span></button>
+    </li>
+  </ul>
+  <div class="tab-content m-5" id="myTabContent">
+    <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+     
+      <% if(userPosts.length == 0){ %> <dialog>No Posts to show.</dialog> <% } %>
+
+      <% userPosts.forEach(function(post) { %>
+
+        <% console.log('each post is', post); %>  
+
+        <div class="card mt-4" >
+          <div class="row card-body" >
+              <div class="col-auto" >
+                  <h2> <%= post.title %></h2>
+              </div>
+           
+          </div>
+          <div class="row mt-0 card-body" >
+              <div class="col-auto" >
+                 
+              
+              </div>
+          </div>
+          <div class="row card-body" >
+              <div class="col-auto" >
+                  <p class="display-6" ><%= post.description %></p>
+              </div>
+          </div>
+      </div>
+  
+   
+      <% });%>
+    </div>
+    <div class="tab-pane fade" id="followers" role="tabpanel" aria-labelledby="followers-tab">
+     
+      <% const followers = locals.followers %>
+    
+      <% if(locals.followers.length == 0){ %> <dialog>No folllowers to show.</dialog> <% } %>
+
+      <% followers.forEach(function(f){ %>
+
+        <div class="card mt-4" >
+          <div class="row card-body align-items-center" >
+              <div class="col-auto" >
+                <img src='<%= f.pic %>?s=50' class="img-fluid" alt="user-pic" /> 
+              </div>
+              <div class="col-auto">
+                <a class="author" href=""><%= f.name %></a>
+              </div>          
+          </div>
+        </div>
+
+      <% }); %>
+      
+
+    </div>
+    <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
+      <% const followings = locals.followings %>
+    
+      <% if(locals.followings.length == 0){ %> <dialog>No folllowings to show.</dialog> <% } %>
+
+      <% followings.forEach(function(f){ %>
+
+        <div class="card mt-4" >
+          <div class="row card-body align-items-center" >
+              <div class="col-auto" >
+                <img src='<%= f.pic %>?s=50' class="img-fluid" alt="user-pic" /> 
+              </div>
+              <div class="col-auto">
+                <a class="author" href=""><%= f.name %></a>
+              </div>          
+          </div>
+        </div>
+
+      <% }); %>
+    </div>
+  </div>
 </div>
 
 <%- include("includes/footer") %>
@@ -24,15 +119,15 @@
 
 if(button){
 
- const action = button.getAttribute('data-action');
- const follower = button.getAttribute('data-follower');
- const following = button.getAttribute('data-following');
- console.log('action is ', action);
-
- 
-
    button.addEventListener('click', async(e) => {
     e.preventDefault();
+
+    var action = button.getAttribute('data-action');
+    const follower = button.getAttribute('data-follower');
+    const following = button.getAttribute('data-following');
+ 
+    console.log('action is ', action);
+
     try {
       
       const res = await fetch('/activity', {
@@ -46,12 +141,27 @@ if(button){
       const data = await res.json();
 
       if(res.status == 200 && data.success == true){
-        console.log('activity done successfully');
-        window.location.reload();
+
+        const totalFollowers = document.querySelector('.totalFollowers');
+        const count =  parseInt( totalFollowers.textContent, 10 );
+
+        if(action === 'Unfollow' ){         
+          totalFollowers.textContent = count-1;
+          button.setAttribute('data-action','Follow');
+          button.textContent = 'Follow';
+        } 
+        else{         
+          totalFollowers.textContent = count+1;
+          button.setAttribute('data-action','Unfollow');
+          button.textContent = 'Unfollow';
+        } 
+
+        console.log('activity done successfully action is now ', button.getAttribute('data-action'));
+        // window.location.reload();
       }
 
     } catch (error) {
-      console.log("Can't do the activity");
+      console.log("Can't do the activity", error);
     }
 
    });

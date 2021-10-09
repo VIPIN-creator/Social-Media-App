@@ -17,7 +17,7 @@
     </head>
     <body>
 
-    <nav class="navbar navbar-expand-md navbar-dark container-fluid " style="background-color: #dc3525;">
+    <nav class="navbar navbar-expand-md navbar-dark container-fluid bg-dark">
      
         <a class="navbar-brand" href="/">Our App</a>
         
@@ -42,16 +42,16 @@
             </div>
 
             <div class="col-auto" >
-              <% if((user.pic)) { %><a><img class="image img-fluid" src =' <%= user.pic  %>?s=45 '/></a> <% } %>
+              <% if((user.pic)) { %><a href=""><img class="profile img-fluid" alt ='<%= user.username %>' src =' <%= user.pic  %>?s=45 '/></a> <% } %>
             </div>
 
             <div class="col-auto" >
               <form action='/logout' class=""  method="GET" id ="logoutForm" >
                 <!-- <input class="form-control me-2" type="text" placeholder="Username" aria-label="Username" name = "username">
                 <input class="form-control me-2" type="password" placeholder="Password" aria-label="Password" name="password"> -->
-                <button class="btn post btn-success" type="button">Create Post 📝</button>
+                <button class="btn post btn-outline-light" type="button">Create Post 📝</button>
 
-                <button class="btn  btn-outline-dark" type="submit">Logout 🔓 </button>
+                <button class="btn  btn-outline-light " type="submit">Logout 🔓 </button>
               </form>
             </div>
             </div>
@@ -65,7 +65,7 @@
                   <input class="form-control " type="password" placeholder="Password" aria-label="Password" name="password">
                 </div>  
                 <div class="col-4 col-form-label" >
-                  <button class="btn btn-outline-dark" type="submit">Login 🔒 </button>
+                  <button class="btn btn-outline-light" type="submit">Login 🔒 </button>
                 </div>  
               </div>
               
@@ -176,6 +176,37 @@
 
           } catch (error) {
             console.log('there is error in sending data to front-end', error);
+          }
+        });
+
+        const profile = document.querySelector('.profile');
+
+        profile.addEventListener('click', async(e)=> {
+          e.preventDefault();
+
+          const userName = profile.getAttribute('alt');
+
+          try {
+            
+            const res = await fetch('/user', {
+                method : 'POST',
+                headers: {'Content-Type': 'application/json'},
+                mode : 'cors',
+                body : JSON.stringify({userName}),
+                redirect : 'follow'
+            });
+
+            const data = await res.json();
+
+                    
+            if(res.status == 200 && data.success == true){
+                window.location.assign('/user');
+            }
+            else{
+                alert('No user exists with this username');
+            }
+          } catch (error) {
+              console.log('there is error in sending data to front-end', error);
           }
 
         });

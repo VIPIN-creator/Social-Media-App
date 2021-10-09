@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Post = require('../models/Post');
 
 
 const jwt = require('jsonwebtoken');
@@ -115,10 +116,28 @@ exports.SearchUser = async(req, res) => {
             if(user.id){
 
                 const found = await User.findOne({username : userName});
+                const posts = await Post.find({user : userName});
 
                 if(found){
-                    console.log('found user is, ', found);
+                    var followers = [];
+
+                    for(let f of found.followers){
+                        const follower = await User.findOne({_id : f});
+                        followers.push({name : follower.username, pic : follower.pic});
+                    }
+
+                    var followings = [];
+
+                    for(let f of found.following){
+                        const following = await User.findOne({_id : f});
+                        followings.push({name : following.username, pic : following.pic});
+                    }
+
+                    console.log('found post is, ', posts);
                     res.cookie('searchedUser',  found);
+                    res.cookie('userPosts', posts);
+                    res.cookie('userFollowers', followers);
+                    res.cookie('userFollowings', followings);
 
                     res
                         .status(200)
