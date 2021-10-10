@@ -40,7 +40,7 @@ const handleErrors = (err) => {
 
 exports.RegisterUser = async (req, res) => {
 
-    console.log('registering user data ', req.body);
+    // console.log('registering user data ', req.body);
 
     try {
         const user = new User(req.body);
@@ -56,7 +56,7 @@ exports.RegisterUser = async (req, res) => {
                 .cookie('jwt', token, {maxAge : maxAge*1000, secure: true, httpOnly : true, sameSite: 'lax' })
                 .json({success : true});
 
-            console.log('new user added');
+            // console.log('new user added');
           
         }
         else throw 'error new user not found';
@@ -72,7 +72,7 @@ exports.RegisterUser = async (req, res) => {
 
 exports.LoginUser = async(req, res) => {
 
-    console.log('logging user data ', req.body);
+    // console.log('logging user data ', req.body);
 
     try {
 
@@ -133,7 +133,7 @@ exports.SearchUser = async(req, res) => {
                         followings.push({name : following.username, pic : following.pic});
                     }
 
-                    console.log('found post is, ', posts);
+                    // console.log('found post is, ', posts);
                     res.cookie('searchedUser',  found);
                     res.cookie('userPosts', posts);
                     res.cookie('userFollowers', followers);

@@ -23,8 +23,8 @@ router.get('*', (req, res, next) => {
                 let user = await User.findById(decodedToken.id);
                 res.locals.user = user;
                                 
-                console.log('locals ', res.locals.user);
-                console.log('token checked at * ');
+                // console.log('locals ', res.locals.user);
+                // console.log('token checked at * ');
                 next();
             }
         });
@@ -38,6 +38,10 @@ router.get('*', (req, res, next) => {
 
 router.get('/', (req, res) => {
         res.redirect('/dashboard');
+});
+
+router.get('/chat', (req, res) => {
+    res.render('chat');
 });
 
 router.post('/login', LoginUser);

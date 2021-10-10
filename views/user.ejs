@@ -10,7 +10,7 @@
     <% if(user.username !== searchedUser.username ) { %>
 
       <div class="col-auto" >
-           
+      
       </div>
       <div class="col-auto" >
         <% const action = user.following.includes(searchedUser._id) ? 'Unfollow' : 'Follow'; %>
@@ -40,8 +40,7 @@
 
       <% userPosts.forEach(function(post) { %>
 
-        <% console.log('each post is', post); %>  
-
+     
         <div class="card mt-4" >
           <div class="row card-body" >
               <div class="col-auto" >

@@ -3,13 +3,11 @@ const express = require('express');
 const path = require('path');
 const routes = require('./router');
 const cors = require('cors');
-const socket = require('socket.io');
 
 //  initiate dotenv and make your environment variables available throughout your application
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const app = express();
-const server = require('http').createServer(app);
 
 dotenv.config();
 
@@ -27,21 +25,33 @@ app.set('view engine', 'ejs');
 
 const PORT = process.env.PORT || 4000;
 
-// connect to db
 
+// connect to db
+var server;
 mongoose.connect(`${process.env.DATABASEURL}`,{useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-        .then( server.listen(PORT, () => console.log(`server is running on port ${PORT}`)))
+        .then( server = app.listen(PORT, () => console.log(`server is running on port ${PORT}`)))
         .catch(e => console.log('error in conneting to db ', e));
 
 
 // Socket Setup
-const io = socket(server);
+const io = require("socket.io")(server);
 
-io.on('connection', (socket) => {
-        console.log("Made socket connection");
+const activeUsers = new Set();
+
+io.on("connection", function (socket) {
+  console.log("Made socket connection");
+
+  socket.on("new user", function (data) {
+    socket.userId = data;
+    activeUsers.add(data);
+    io.emit("new user", [...activeUsers]);
+  });
+
+  socket.on("disconnect", () => {
+    activeUsers.delete(socket.userId);
+    io.emit("user disconnected", socket.userId);
+  });
 });
-
-
 
 
 // routes
