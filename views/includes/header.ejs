@@ -29,7 +29,7 @@
 
          
           <% if(user) { %>
-            <div class="row">
+            <div class="row align-items-center ">
               <div class="col-auto" >
               <form action="/user" method="POST" class="" id = "search">
                 <div class="input-group">
@@ -39,6 +39,10 @@
                   </div>
                 </div>
               </form>
+            </div>
+
+            <div class="col-auto" >
+              <h2 type="submit" class="chat" >🗨</h2>
             </div>
 
             <div class="col-auto" >
@@ -210,6 +214,34 @@
           }
 
         });
+
+        const chat = document.querySelector('.chat');
+
+        
+        chat.addEventListener('click', async(e) => {
+          e.preventDefault();
+
+          try {
+            const res = await fetch('/chat', {
+              method : 'GET',
+              headers: {'Content-Type': 'application/json'},
+              mode : 'cors',
+              redirect : 'follow'
+            });
+
+            if(res.status == 200){
+             window.location.assign('/chat');
+            }
+            else{
+              throw Error({status : res.status});
+            }
+            
+          } catch (err) {
+            console.log('there is a error in sending the data ', err);
+          }
+
+        });
+
 
       }
 

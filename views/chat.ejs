@@ -1,23 +1,42 @@
 <%- include("includes/header") %>
 
-<div class="container mt-4">
-  <div class="row" >
-   
-      <div class="col-3 border border-secondary">
-        <h2>Active Users</h2>
-         <hr>
-        <ul class="userLists" >
-            <li class="currentUser" ><%= user.username %></li>
-        </ul>
-      </div>
-  
-      <div class="col-6 border border-secondary text-center ">
-       
-          <h2>Messages</h2>
-       
-        <hr>
-       
-      </div>
+<div class="container mt-4 rounded-2 border border-dark "  >
+  <div class="row justify-content-between" style="height: 70vh;" >
+    <div class="col-4 bg-light">
+      <h2>Active Users</h2>
+      <hr>
+      <ul class="userLists" >
+        <li class="currentUser" ><%= user.username %></li>
+    </ul>
+    </div>
+    <div class="col-8 ">
+      <h2 class="text-center" >Messages</h2>     
+      <hr> 
+      <div class="row inbox">
+        <!-- <div class="col-3 incoming">
+          
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3 outgoing">
+         
+        </div> -->
+      </div>   
+      
+    </div>
+  </div>
+  <div class="row bg-light justify-content-end "   >
+     <div class="col-8" >
+      <form class="messageForm p-3">
+        <div class="row">
+          <div class="col-9 col-md-9 col-sm-3">
+            <input type="text" name="message" class="messageInput form-control" placeholder="Type a message" />
+          </div>
+          <div class="col-2 col-sm-2">
+            <button  type="submit" class="btn btn-primary message_form__button form-control" type="submit">Enter</button>
+          </div>
+        </div>         
+      </form>    
+     </div>
   </div>
 </div>
 
@@ -30,36 +49,81 @@
   const inboxPeople = document.querySelector(".inbox__people");
   const currentUser = document.querySelector('.currentUser').textContent;
   const userLists = document.querySelector('.userLists');
+  const messageForm = document.querySelector('.messageForm');
+  const inbox = document.querySelector('.inbox');
 
 
-
-const newUserConnected = () => {
+//  handle Connection and Disconnect
+ const newUserConnected = () => {
   socket.emit("new user", currentUser);
+  addToUsersBox(currentUser);
  };
 
-const addToUsersBox = (userName) => {
+ const addToUsersBox = (userName) => {
   if (userName === currentUser) {
     return;
   }
 
   const userBox = `
-   <li class =${userName} > ${userName} </li>
+   <li class ='${userName}' > ${userName} </li>
   `;
   userLists.innerHTML += userBox;
-};
+  };
 
 // new user is created so we generate nickname and emit event
 newUserConnected();
+ 
 
-socket.on("new user", function (data) {
-  console.log('data is ', data);
-  data.map((user) => addToUsersBox(user));
+  socket.on("new user", function (data) {
+    console.log('data is ', data);
+    data.map((user) => addToUsersBox(user));
+  });
+
+  socket.on("user disconnected", function (userName) {
+    document.querySelector(`.${userName}`).remove();
+  });
+
+// handle Messaging
+const addNewMessage = ({name, body}) => {
+  
+
+  if(name === currentUser){
+    const message = ` <div class="btn btn-primary my-2 offset-8 col-4 align-items-center" > 
+                      <p>${body} </p>
+
+                    </div> <div class="w-100"></div> ` ;
+    inbox.innerHTML += message;
+  }
+  else{
+    const message = ` <div class="btn btn-secondary my-2 col-4 align-items-center" > 
+                      <p>${body} </p>
+
+                    </div>  <span class="w-100">From : ${name}</span>` ;
+    inbox.innerHTML += message;
+  }
+}
+
+messageForm.addEventListener('submit', (e)=> {
+  e.preventDefault();
+
+  if(!messageForm.message.value){
+    return ;
+  }
+
+  socket.emit("chat message", {
+    body : messageForm.message.value,
+    name : currentUser,
+  });
+
+ 
+
+  messageForm.message.value = '';
+
 });
 
-socket.on("user disconnected", function (userName) {
-  document.querySelector(`.${userName}`).remove();
-});
-
+socket.on("chat message", (data) => {
+    addNewMessage({name : data.name, body: data.body});   
+  });
 
 </script>
 

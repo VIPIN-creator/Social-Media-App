@@ -84,8 +84,6 @@
         </div>
 
       <% }); %>
-      
-
     </div>
     <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
       <% const followings = locals.followings %>
@@ -141,22 +139,22 @@ if(button){
 
       if(res.status == 200 && data.success == true){
 
-        const totalFollowers = document.querySelector('.totalFollowers');
-        const count =  parseInt( totalFollowers.textContent, 10 );
+        // const totalFollowers = document.querySelector('.totalFollowers');
+        // const count =  parseInt( totalFollowers.textContent, 10 );
 
-        if(action === 'Unfollow' ){         
-          totalFollowers.textContent = count-1;
-          button.setAttribute('data-action','Follow');
-          button.textContent = 'Follow';
-        } 
-        else{         
-          totalFollowers.textContent = count+1;
-          button.setAttribute('data-action','Unfollow');
-          button.textContent = 'Unfollow';
-        } 
+        // if(action === 'Unfollow' ){         
+        //   totalFollowers.textContent = count-1;
+        //   button.setAttribute('data-action','Follow');
+        //   button.textContent = 'Follow';
+        // } 
+        // else{         
+        //   totalFollowers.textContent = count+1;
+        //   button.setAttribute('data-action','Unfollow');
+        //   button.textContent = 'Unfollow';
+        // } 
 
-        console.log('activity done successfully action is now ', button.getAttribute('data-action'));
-        // window.location.reload();
+        // console.log('activity done successfully action is now ', button.getAttribute('data-action'));
+        window.location.reload();
       }
 
     } catch (error) {
@@ -166,5 +164,41 @@ if(button){
    });
   }
 
+
+  const author = document.querySelectorAll('.author');
+    
+    for(var i = 0; i<author.length; i++){
+        const userName = author[i].textContent;
+
+        author[i].addEventListener('click', async(e)=> {
+            e.preventDefault();
+            console.log('value ', userName);
+            try {
+            
+                const res = await fetch('/user', {
+                    method : 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    mode : 'cors',
+                    body : JSON.stringify({userName}),
+                    redirect : 'follow'
+                });
+
+                const data = await res.json();
+
+                        
+                if(res.status == 200 && data.success == true){
+                    window.location.assign('/user');
+                }
+                else{
+                    alert('No user exists with this username');
+                }
+            } catch (error) {
+                console.log('there is error in sending data to front-end', error);
+            }
+            
+
+
+        });
+    }
  
 </script>
