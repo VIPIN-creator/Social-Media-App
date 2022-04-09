@@ -1,18 +1,18 @@
 <%- include("includes/header") %>
 
-<div class="container mt-4 rounded-2 border border-dark "  >
+<div class="container mt-4 rounded-2 border border-dark" style="background-color: #F4F5FB;"  >
   <div class="row justify-content-between" style="height: 70vh;" >
-    <div class="col-4 bg-light">
+    <div class="col-4 ">
       <h2>Active Users</h2>
       <hr>
       <ul class="userLists" >
         <li class="currentUser" ><%= user.username %></li>
     </ul>
     </div>
-    <div class="col-8 ">
+    <div class="col-8  ">
       <h2 class="text-center" >Messages</h2>     
       <hr> 
-      <div class="row inbox">
+      <div class="row overflow-auto inbox justify-content-between" style="height: 50vh;" >
         <!-- <div class="col-3 incoming">
           
         </div>
@@ -24,14 +24,14 @@
       
     </div>
   </div>
-  <div class="row bg-light justify-content-end "   >
+  <div class="row  justify-content-end "   >
      <div class="col-8" >
       <form class="messageForm p-3">
         <div class="row">
-          <div class="col-9 col-md-9 col-sm-3">
+          <div class="col-sm-auto col-md-10 "> 
             <input type="text" name="message" class="messageInput form-control" placeholder="Type a message" />
           </div>
-          <div class="col-2 col-sm-2">
+          <div class="col-sm-auto col-md-2">
             <button  type="submit" class="btn btn-primary message_form__button form-control" type="submit">Enter</button>
           </div>
         </div>         
@@ -82,24 +82,36 @@ newUserConnected();
   socket.on("user disconnected", function (userName) {
     document.querySelector(`.${userName}`).remove();
   });
+  
+  const scrollToBottom = (node) => {
+	node.scrollTop = node.scrollHeight;
+}
 
 // handle Messaging
 const addNewMessage = ({name, body}) => {
   
 
   if(name === currentUser){
-    const message = ` <div class="btn btn-primary my-2 offset-8 col-4 align-items-center" > 
-                      <p>${body} </p>
-
+    const message = ` <div class=" col-auto ms-auto mt-2" style =" max-height: 60px"> 
+                      <div style =" width:20vh; height:5vh;" class =" bg-white rounded-2 border  text-center">
+                      <p class="m-auto " >${body} </p>
+                      </div>
+                      <p style="float:right" class="text-muted">From : ${name}</p> 
                     </div> <div class="w-100"></div> ` ;
     inbox.innerHTML += message;
+    scrollToBottom(inbox); 
+    
   }
   else{
-    const message = ` <div class="btn btn-secondary my-2 col-4 align-items-center" > 
-                      <p>${body} </p>
-
-                    </div>  <span class="w-100">From : ${name}</span>` ;
+    const message = ` <div class="col-auto me-auto mt-2" style ="max-height: 60px" > 
+                      <div class=" rounded-2 border  bg-white text-center" style =" width:20vh; height:5vh;">
+                      <p class="m-auto " >${body} </p>
+                      </div>
+                      <p style="float:left" class="text-muted" >From : ${name}</p> 
+                    </div><div class="w-100"></div> `;
     inbox.innerHTML += message;
+scrollToBottom(inbox); 
+    
   }
 }
 

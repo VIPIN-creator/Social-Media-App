@@ -78,6 +78,6 @@ router.get('/user', (req, res) => {
 
 // router.post('/follow', FollowUser);
 // router.post('/unfollow', UnfollowUser);
-router.post('/activity', FollowUnfollow);
+router.post('/activity', FollowUnfollow, SearchUser);
 
 module.exports = router;

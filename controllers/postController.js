@@ -36,7 +36,7 @@ exports.CreatePost = async(req, res) => {
 
                 const newPost = await post.save();
 
-                await User.findOneAndUpdate({_id : user.id}, {$push : {posts : newPost}} );
+                await User.findOneAndUpdate({_id : user.id}, {$push : {posts : newPost._id}} );
 
                 res
                     .status(200)
@@ -68,21 +68,20 @@ exports.CreatePost = async(req, res) => {
 exports.LoadDashboard = async(req, res) => {
     try{
         const posts = new Array();
-
-        if(res.locals.user.posts.length) posts.push(res.locals.user.posts[res.locals.user.posts.length - 1]);
     
         const user = await User.findOne({_id : res.locals.user._id});
-    
-        // user.following.forEach( (f) =>{
-        //     const following = await User.findOne({_id : f});
-        //     post.push(following.posts.slice(-1));
-        // })      
 
         for(let f of user.following){
             
             const following = await User.findOne({_id : f});
-            console.log('following ', following.posts[following.posts.length - 1]);
-            posts.push(following.posts[following.posts.length - 1]);
+           
+            if(following && following.posts.length > 0){
+
+                const follwingPost = await Post.findById(following.posts[following.posts.length - 1]);
+
+                console.log('following ', following.posts[following.posts.length - 1]);
+                posts.push(follwingPost);
+            }
         }
       
             res

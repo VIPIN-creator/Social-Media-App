@@ -1,6 +1,6 @@
 const User = require('../models/User');
 
-exports.FollowUnfollow = async(req, res) => {
+exports.FollowUnfollow = async(req, res, next) => {
     console.log('user to be followed ', req.body);
 
     const {action, follower, following} = req.body;
@@ -10,18 +10,15 @@ exports.FollowUnfollow = async(req, res) => {
         if(action == 'Follow'){       
             await User.findByIdAndUpdate(follower, {$push : {following : following} });
             await User.findByIdAndUpdate(following, {$push : {followers : follower} });
-            res
-                .status(200)
-                .json({success : true});
-                
+           
+            next();              
         }
 
         if(action == 'Unfollow'){
             await User.findByIdAndUpdate(follower, {$pull : {following : following} });
             await User.findByIdAndUpdate(following, {$pull : {followers : follower} });
-            res
-                .status(200)
-                .json({success : true});
+            
+            next();
         }
         
 

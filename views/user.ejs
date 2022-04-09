@@ -36,7 +36,7 @@
   <div class="tab-content m-5" id="myTabContent">
     <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
      
-      <% if(userPosts.length == 0){ %> <dialog>No Posts to show.</dialog> <% } %>
+      <% if(userPosts.length == 0){ %> <h3 class = "display-3 text-center"> <span class = "badge bg-primary" > No Posts to show.</span></h3> <% } %>
 
       <% userPosts.forEach(function(post) { %>
 
@@ -68,7 +68,7 @@
      
       <% const followers = locals.followers %>
     
-      <% if(locals.followers.length == 0){ %> <dialog>No folllowers to show.</dialog> <% } %>
+      <% if(locals.followers.length == 0){ %> <h3 class = "display-3 text-center"> <span class = "badge bg-primary" > No Followers to show.</span></h3>  <% } %>
 
       <% followers.forEach(function(f){ %>
 
@@ -88,7 +88,7 @@
     <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
       <% const followings = locals.followings %>
     
-      <% if(locals.followings.length == 0){ %> <dialog>No folllowings to show.</dialog> <% } %>
+      <% if(locals.followings.length == 0){ %> <h3 class = "display-3 text-center"> <span class = "badge bg-primary" > No Followings to show.</span></h3>  <% } %>
 
       <% followings.forEach(function(f){ %>
 
@@ -122,6 +122,7 @@ if(button){
     var action = button.getAttribute('data-action');
     const follower = button.getAttribute('data-follower');
     const following = button.getAttribute('data-following');
+    const userName = document.querySelector('.header').textContent;
  
     console.log('action is ', action);
 
@@ -130,7 +131,7 @@ if(button){
       const res = await fetch('/activity', {
         method : 'POST',
         headers: {'Content-Type': 'application/json'},
-        body :JSON.stringify({action, follower, following}),
+        body :JSON.stringify({action, follower, following, userName}),
         mode : 'cors',
         redirect : 'follow'
       });
@@ -154,7 +155,7 @@ if(button){
         // } 
 
         // console.log('activity done successfully action is now ', button.getAttribute('data-action'));
-        window.location.reload();
+        window.location.assign('/user');
       }
 
     } catch (error) {
