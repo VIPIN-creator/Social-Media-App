@@ -1,10 +1,10 @@
 
 <%- include("includes/header") -%>
 
-<div class="container" style="margin: 4em; padding: 1em;" >
+<div class="container" style="margin: 4em; padding: 1em; " >
 
     <div class="row">
-      <div class="col-lg-8 col-md-8 col-sm-12 text-center" >
+      <div class="col-lg-8 col-md-8 col-sm-12 text-center" style="background-image:url('../public/assets/landing.png');"  >
             <h3>Welcome to your fav place</h3>
       </div>
 
@@ -15,19 +15,19 @@
                   <label for="username" class="form-label">Username</label>
                   <input type="text" class="form-control" name = "username" id="username">
                 </div>
-                <div class="username error mb-3" ></div>
+                <div class="username error mb-3 text-danger" ></div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" name="email" id="email">
                   </div>
-                <div class="email error mb-3" ></div>
+                <div class="email error mb-3 text-danger" ></div>
 
                 <div class="mb-3">
                   <label for="password" class="form-label">Password</label>
                   <input type="password" class="form-control" name="password" id="password">
                 </div>  
-                <div class="password error mb-3" ></div>
+                <div class="password error mb-3 text-danger" ></div>
 
                 <button type="submit" class="btn btn-success btn-block" name = "submit">Submit</button>
               </form>
