@@ -19,6 +19,23 @@ npm install
 npm dev
 ```
 
+## Screenshots
+Guest screen
+![image](https://github.com/VIPIN-creator/Social-Media-App/assets/59695863/15560a4f-0ba0-41c9-9b5f-597936195e4e)
+
+Dashboard
+![image](https://github.com/VIPIN-creator/Social-Media-App/assets/59695863/cebaf39b-1b50-49cd-9d5d-659d03549614)
+
+User Profile
+![image](https://github.com/VIPIN-creator/Social-Media-App/assets/59695863/069df470-844e-4b71-9403-f6e920ccdf08)
+
+Chat
+![image](https://github.com/VIPIN-creator/Social-Media-App/assets/59695863/81a66123-abcc-461a-af64-a0dd4aed81ac)
+
+Create Post
+![image](https://github.com/VIPIN-creator/Social-Media-App/assets/59695863/7cf89a67-7552-422b-bef0-f9074bf8f8c0)
+
+
 ## Author
 
 👤 **Vipin Tripathi**
